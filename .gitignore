@@ -79,3 +79,9 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
+# macOS
+.DS_Store
+
+# Port configuration file
+public/port.txt
+

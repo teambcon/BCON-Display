@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>BCON Arcade</title>
+
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/custom.css">
+
+        <script src="/js/socket.io.slim.js"></script>
+        <script src="/js/jquery-3.3.0.min.js"></script>
+        <script src="/js/popper.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        <script>
+            // Read in the configured port to communicate with the backend.
+            $.get( 'port.txt', ( port ) => {
+                // Initialize the client socket.
+                const socket = io( 'http://localhost:' + port );
+
+                // Callback for game data events.
+                socket.on( 'games', ( data ) => {
+                    // Store the games information.
+                    gamesArray = data.games;
+                } );
+
+                // Callback for stats data events.
+                socket.on( 'stats', ( data ) => {
+                    // Refresh the screen with the new information.
+                    waitAndProcessStats( data.stats );
+
+                    // Update the timestamp in the footer.
+                    var timestamp = new Date().toLocaleTimeString( 'en-US' ).replace( /:\d+ /, ' ' );
+                    var footerContent = $( '<span class="text-muted" align="center">Last updated at ' 
+                        + timestamp + '.</span>' );
+                    $( '#footerContent' ).empty();
+                    $( '#footerContent' ).append( footerContent );
+                } );
+            } );
+
+            // Initialize an array to store game information in.
+            var gamesArray = [];
+
+            const processStats = ( stats ) => {
+                // Clear the div of any existing content.
+                $( '#dataContainer' ).empty();
+
+                // Construct and populate a table for each of the registered games.
+                for ( var i = 0; i < gamesArray.length; i++ )
+                {
+                    var heading = $( '<br><h2>' + gamesArray[ i ].name + '</h2>' );
+
+                    var tableIsEmpty = true;
+                    var table = $( '<table></table>' ).addClass( 'table' )
+                        .append( $( '<thead><tr><th scope="col">Screen Name</th><th scope="col">Rounds Played</th>\
+                        <th scope="col">Tickets Earned</th><th scope="col">High Score</th></tr></thead>' ) );
+
+                    // Iterate over the stats array to look for data to process.
+                    for ( var j = 0; j < stats.length; j++ )
+                    {
+                        // Check if the player has a record for this game.
+                        for ( var k = 0; k < stats[ j ].gameStats.length; k++ )
+                        {
+                            if ( gamesArray[ i ]._id === stats[ j ].gameStats[ k ].gameId )
+                            {
+                                // Add a new row with the player's gameplay information.
+                                var row = $( '<tr></tr>' )
+                                    .append( $( '<td>' + stats[ j ].screenName + '</td>' ) )
+                                    .append( $( '<td>' + stats[ j ].gameStats[ k ].gamesPlayed + '</td>' ) )
+                                    .append( $( '<td>' + stats[ j ].gameStats[ k ].ticketsEarned + '</td>' ) )
+                                    .append( $( '<td>' + stats[ j ].gameStats[ k ].highScore + '</td>' ) );
+                                table.append( row );
+                                tableIsEmpty = false;
+                            }
+                        }
+                    }
+
+                    if ( !tableIsEmpty )
+                    {
+                        // Add the header and table to the displayed content area.
+                        $( '#dataContainer' ).append( heading );
+                        $( '#dataContainer' ).append( table );
+                    }
+                }
+            };
+
+            const waitAndProcessStats = async ( stats ) => {
+                // Block until valid game information has been received.
+                while ( 0 >= gamesArray.length )
+                {
+                    await sleep( 100 )
+                }
+
+                processStats( stats );
+            }
+
+            const sleep = ( ms ) => {
+                return new Promise( resolve => setTimeout( resolve, ms ) );
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <br>
+            <h1 class="text-center">BCON Arcade Statistics</h1>
+            <div id="dataContainer"></div>
+        </div>
+
+        <footer class="footer">
+            <div id="footerContent" class="container" style="text-align: center"></div>
+        </footer>
+    </body>
+</html>

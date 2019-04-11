@@ -1,0 +1,24 @@
+{
+  "name": "bcon-display",
+  "version": "1.0.0",
+  "description": "Frontend display for the BCON RFID Arcade",
+  "main": "client.js",
+  "scripts": {
+    "start": "DEV=1 node client.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teambcon/BCON-Display.git"
+  },
+  "author": "Ben Prisby",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/teambcon/BCON-Display/issues"
+  },
+  "homepage": "https://github.com/teambcon/BCON-Display#readme",
+  "dependencies": {
+    "dotenv": "^7.0.0",
+    "express": "^4.16.4"
+  }
+}
