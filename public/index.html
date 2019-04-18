@@ -67,8 +67,8 @@
                                 var row = $( '<tr></tr>' )
                                     .append( $( '<td>' + stats[ j ].screenName + '</td>' ) )
                                     .append( $( '<td>' + stats[ j ].gameStats[ k ].gamesPlayed + '</td>' ) )
-                                    .append( $( '<td>' + stats[ j ].gameStats[ k ].ticketsEarned + '</td>' ) )
-                                    .append( $( '<td>' + stats[ j ].gameStats[ k ].highScore + '</td>' ) );
+                                    .append( $( '<td>' + stats[ j ].gameStats[ k ].ticketsEarned.toString().replace( /\B(?=(\d{3})+(?!\d))/g, "," ) + '</td>' ) )
+                                    .append( $( '<td>' + stats[ j ].gameStats[ k ].highScore.toString().replace( /\B(?=(\d{3})+(?!\d))/g, "," ) + '</td>' ) );
                                 table.append( row );
                                 tableIsEmpty = false;
                             }
