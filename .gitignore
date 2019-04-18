@@ -82,6 +82,6 @@ typings/
 # macOS
 .DS_Store
 
-# Port configuration file
-public/port.txt
+# Server configuration file
+public/server.txt
 

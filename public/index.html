@@ -13,10 +13,10 @@
         <script src="/js/popper.min.js"></script>
         <script src="/js/bootstrap.min.js"></script>
         <script>
-            // Read in the configured port to communicate with the backend.
-            $.get( 'port.txt', ( port ) => {
+            // Read in the configured address to communicate with the backend.
+            $.get( 'server.txt', ( server ) => {
                 // Initialize the client socket.
-                const socket = io( 'http://localhost:' + port );
+                const socket = io( server );
 
                 // Callback for game data events.
                 socket.on( 'games', ( data ) => {
