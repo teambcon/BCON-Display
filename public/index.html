@@ -30,7 +30,7 @@
                     waitAndProcessStats( data.stats );
 
                     // Update the timestamp in the footer.
-                    var timestamp = new Date().toLocaleTimeString( 'en-US' ).replace( /:\d+ /, ' ' );
+                    var timestamp = new Date().toLocaleTimeString( 'en-US' );
                     var footerContent = $( '<span class="text-muted" align="center">Last updated at ' 
                         + timestamp + '.</span>' );
                     $( '#footerContent' ).empty();
